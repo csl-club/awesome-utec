@@ -3,7 +3,7 @@
 	import classNames from 'classnames';
 	import type { HTMLLiAttributes } from 'svelte/elements';
 	import { repoStringToUrl } from '$lib/repo';
-	import ExternalLink from '$lib/ExternalLink.svelte';
+	import ExternalLink from '$lib/components/ExternalLink.svelte';
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;

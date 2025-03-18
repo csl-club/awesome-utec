@@ -1,6 +1,10 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import YAML from 'yaml';
+import { Octokit } from '@octokit/rest';
+import { Gitlab } from '@gitbeaker/rest';
+import { parseRepoInfo } from './repo';
+import { isEmpty, maxKeyByValue } from './util';
 
 export interface Author {
 	id: string;
@@ -8,18 +12,21 @@ export interface Author {
 	email?: string;
 }
 
-export interface Project {
-	name: string;
-	authors: Author[];
-	summary: string;
-	repo: string;
-}
-
 export interface ProjectData {
 	name: string;
 	authors: string[];
-	summary: string;
+	tags?: string[];
+	summary?: string;
 	repo: string;
+}
+
+export interface Project {
+	name: string;
+	authors: Author[];
+	tags: string[];
+	summary?: string;
+	repo: string;
+	lang?: string;
 }
 
 export interface ContentData {
@@ -37,13 +44,58 @@ export const getContent = async (): Promise<ContentData> => {
 
 export const getAllProjects = async (): Promise<Project[]> => {
 	const { projects, authors } = await getContent();
-	return projects.map((project) => ({
-		...project,
-		authors: project.authors.map((authorId) => authors.find((author) => author.id === authorId)!),
-	}));
+	console.log(await Promise.all(projects.map((proj) => completeProjectData(proj, authors))));
+	return await Promise.all(projects.map((proj) => completeProjectData(proj, authors)));
 };
 
 export const getAllAuthors = async (): Promise<Author[]> => {
 	const content = await getContent();
 	return content.authors;
+};
+
+const completeProjectData = async (
+	projectData: ProjectData,
+	allAuthors: Author[],
+): Promise<Project> => {
+	const tags = projectData.tags?.map((s) => s.toLowerCase()) ?? [];
+	const authors = projectData.authors.map(
+		(authorId) => allAuthors.find((author) => author.id === authorId)!,
+	);
+
+	let { summary } = projectData;
+	let lang: string | undefined = undefined;
+
+	const repoInfo = parseRepoInfo(projectData.repo);
+
+	if (repoInfo !== null) {
+		switch (repoInfo.type) {
+			case 'github': {
+				const { data: repoData } = await new Octokit().rest.repos.get({ ...repoInfo });
+				if (repoData.language) lang = repoData.language;
+				if (repoData.description) summary ??= repoData.description;
+				break;
+			}
+			case 'gitlab': {
+				const projId = `${repoInfo.owner}/${repoInfo.repo}`;
+				const gitlab = new Gitlab({});
+
+				const langs = await gitlab.Projects.showLanguages(projId);
+				if (!isEmpty(langs)) lang = maxKeyByValue(langs);
+
+				if (summary === undefined) {
+					const projectData = await gitlab.Projects.show(projId);
+					if (projectData.description) summary ??= projectData.description;
+				}
+				break;
+			}
+		}
+	}
+
+	return {
+		...projectData,
+		summary,
+		authors,
+		tags,
+		lang,
+	};
 };

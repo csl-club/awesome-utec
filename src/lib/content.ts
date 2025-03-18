@@ -44,7 +44,6 @@ export const getContent = async (): Promise<ContentData> => {
 
 export const getAllProjects = async (): Promise<Project[]> => {
 	const { projects, authors } = await getContent();
-	console.log(await Promise.all(projects.map((proj) => completeProjectData(proj, authors))));
 	return await Promise.all(projects.map((proj) => completeProjectData(proj, authors)));
 };
 

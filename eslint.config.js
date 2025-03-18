@@ -16,6 +16,11 @@ export default ts.config(
 	prettier,
 	...svelte.configs.prettier,
 	{
+		rules: {
+			'@typescript-eslint/no-empty-object-type': 'off',
+		},
+	},
+	{
 		languageOptions: {
 			globals: {
 				...globals.browser,

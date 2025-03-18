@@ -1,0 +1,27 @@
+authors:
+  - id: grayson
+    name: José Daniel Grayson
+    email: josedanielgrayson@proton.me
+  - id: salva
+    name: Salvador Donayre
+    email: atlas200x@gmail.com
+  - id: erizur
+    name: Angel Mattos
+
+projects:
+  - name: Space Invaders
+    authors: [grayson]
+    summary: Emulador de Space Invaders escrito en Rust.
+    repo: github:Grazen0/space-invaders
+  - name: Frozen Bubble SDL2
+    authors: [erizur]
+    summary: Un port no oficial en SDL2 de Frozen Bubble.
+    repo: github:Erizur/frozen-bubble-sdl2
+  - name: Alfajor
+    authors: [salva]
+    summary: Hack de ViaVersion para interceptar packet mappers en Minecraft.
+    repo: github:OcZi/Alfajor
+  - name: NES Pong
+    authors: [grayson]
+    summary: Un juego simple de pong para la NES.
+    repo: github:Grazen0/nes-pong

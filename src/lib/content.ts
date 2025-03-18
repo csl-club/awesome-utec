@@ -4,7 +4,7 @@ import YAML from 'yaml';
 import { Octokit } from '@octokit/rest';
 import { Gitlab } from '@gitbeaker/rest';
 import { parseRepoInfo } from './repo';
-import { isEmpty, maxKeyByValue } from './util';
+import { isEmpty, maxKeyByValue } from './object';
 
 export interface Author {
 	id: string;

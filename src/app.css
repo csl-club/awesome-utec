@@ -1,2 +1,52 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+@font-face {
+	font-family: 'Commit Mono';
+	src: url('/assets/font/CommitMono-400-Regular.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Commit Mono';
+	src: url('/assets/font/CommitMono-700-Regular.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Commit Mono';
+	src: url('/assets/font/CommitMono-400-Italic.otf') format('opentype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Commit Mono';
+	src: url('/assets/font/CommitMono-700-Italic.otf') format('opentype');
+	font-weight: bold;
+	font-style: italic;
+}
+
+@theme {
+	--color-background: #eff1f5;
+	--color-background-alt: #e6e9ef;
+	--color-foreground: #4c4f69;
+	--font-main: 'Commit Mono', monospace;
+}
+
+@layer base {
+	body {
+		background-color: var(--color-background);
+		color: var(--color-foreground);
+		font-family: var(--font-main);
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+}

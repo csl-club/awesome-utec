@@ -29,7 +29,7 @@
 		/>
 	</div>
 
-	<ul class="my-8 grid grid-cols-2 gap-4">
+	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
 		{#each filteredProjects as project (project.repo)}
 			<ProjectCard {project} />
 		{/each}

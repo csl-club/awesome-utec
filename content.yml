@@ -12,16 +12,20 @@ projects:
   - name: Space Invaders
     authors: [grayson]
     summary: Emulador de Space Invaders escrito en Rust.
+    tags: [videogames, retro]
     repo: github:Grazen0/space-invaders
   - name: Frozen Bubble SDL2
     authors: [erizur]
     summary: Un port no oficial en SDL2 de Frozen Bubble.
+    tags: [videogames]
     repo: github:Erizur/frozen-bubble-sdl2
   - name: Alfajor
     authors: [salva]
     summary: Hack de ViaVersion para interceptar packet mappers en Minecraft.
+    tags: [videogames]
     repo: github:OcZi/Alfajor
   - name: NES Pong
     authors: [grayson]
     summary: Un juego simple de pong para la NES.
+    tags: [videogames, retro]
     repo: github:Grazen0/nes-pong

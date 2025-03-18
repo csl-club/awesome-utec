@@ -11,6 +11,9 @@ importers:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      simple-icons:
+        specifier: ^14.11.0
+        version: 14.11.0
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -1857,6 +1860,10 @@ packages:
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+
+  simple-icons@14.11.0:
+    resolution: {integrity: sha512-wZmG7JXVhFrobLIUum20blb9mvW3TfUcSLP9bOQ42Ul37GYc/59armh2wKySHzhN1/NaTan5VUQmr/9wYseRXA==}
+    engines: {node: '>=0.12.18'}
 
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
@@ -3767,6 +3774,8 @@ snapshots:
       side-channel-weakmap: 1.0.2
 
   siginfo@2.0.0: {}
+
+  simple-icons@14.11.0: {}
 
   simple-swizzle@0.2.2:
     dependencies:

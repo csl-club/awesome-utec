@@ -32,6 +32,7 @@
 @theme {
 	--color-background: #eff1f5;
 	--color-background-alt: #e6e9ef;
+	--color-background-alt-2: #dce0e8;
 	--color-foreground: #4c4f69;
 	--font-main: 'Commit Mono', monospace;
 }

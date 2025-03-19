@@ -5,6 +5,7 @@ import { Octokit } from '@octokit/rest';
 import { Gitlab } from '@gitbeaker/rest';
 import { parseRepoInfo } from './repo';
 import { isEmpty, maxKeyByValue } from './object';
+import { GITHUB_TOKEN } from '$env/static/private';
 
 export interface Author {
 	id: string;
@@ -69,14 +70,13 @@ const completeProjectData = async (
 	if (repoInfo !== null) {
 		switch (repoInfo.type) {
 			case 'github': {
-				const auth = process.env.GITHUB_TOKEN;
-				if (!auth) {
+				if (!GITHUB_TOKEN) {
 					console.warn(
 						'GITHUB_TOKEN environment variable not found. Proceeding without authentication',
 					);
 				}
 
-				const octokit = new Octokit({ auth });
+				const octokit = new Octokit({ auth: GITHUB_TOKEN });
 				const { data: repoData } = await octokit.rest.repos.get({ ...repoInfo });
 
 				if (repoData.language) lang = repoData.language;

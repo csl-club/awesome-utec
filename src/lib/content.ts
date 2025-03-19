@@ -69,7 +69,16 @@ const completeProjectData = async (
 	if (repoInfo !== null) {
 		switch (repoInfo.type) {
 			case 'github': {
-				const { data: repoData } = await new Octokit().rest.repos.get({ ...repoInfo });
+				const auth = process.env.GITHUB_TOKEN;
+				if (!auth) {
+					console.warn(
+						'GITHUB_TOKEN environment variable not found. Proceeding without authentication',
+					);
+				}
+
+				const octokit = new Octokit({ auth });
+				const { data: repoData } = await octokit.rest.repos.get({ ...repoInfo });
+
 				if (repoData.language) lang = repoData.language;
 				if (repoData.description) summary ??= repoData.description;
 				break;

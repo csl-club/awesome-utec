@@ -1,25 +1,14 @@
 <script lang="ts">
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { satisfiesQuery } from '$lib/search';
-	import { on } from 'svelte/events';
 	import type { PageProps } from './$types';
-	import { onMount } from 'svelte';
+	import SearchInput from '$lib/components/SearchInput.svelte';
 
 	let searchQuery = $state('');
-	let searchInput = $state<HTMLInputElement | null>(null);
 
 	const { data }: PageProps = $props();
 
 	const filteredProjects = $derived(data.projects.filter((p) => satisfiesQuery(p, searchQuery)));
-
-	onMount(() =>
-		on(document, 'keydown', (ev) => {
-			if (ev.key === '/' && document.activeElement !== searchInput) {
-				ev.preventDefault();
-				searchInput?.focus();
-			}
-		}),
-	);
 </script>
 
 <svelte:head>
@@ -33,13 +22,7 @@
 	</p>
 
 	<div class="space-x-4 text-center">
-		<input
-			type="text"
-			placeholder="Buscar..."
-			bind:value={() => searchQuery, (v) => (searchQuery = v.trimStart())}
-			bind:this={searchInput}
-			class="border-foreground border px-2 py-1"
-		/>
+		<SearchInput placeholder="Buscar..." bind:value={searchQuery} />
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">

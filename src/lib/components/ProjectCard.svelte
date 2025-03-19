@@ -6,6 +6,7 @@
 	import ExternalLink from '$lib/components/ExternalLink.svelte';
 	import { iconByProgrammingLanguage } from '$lib/icons';
 	import SimpleIconComponent from './SimpleIconComponent.svelte';
+	import { Link } from '@lucide/svelte';
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
@@ -20,7 +21,10 @@
 <li {...props} class={classNames(className, 'bg-background-alt flex flex-col px-3 py-2')}>
 	<div class="flex justify-between">
 		<h2 class="text-xl font-semibold">
-			<ExternalLink href={projectUrl}>{project.name}</ExternalLink>
+			<ExternalLink href={projectUrl}>
+				{project.name}
+				<Link class="text-foreground-muted inline w-3" />
+			</ExternalLink>
 		</h2>
 		<span>
 			{#if langIcon !== null}

@@ -5,6 +5,7 @@
 	import { repoStringToUrl } from '$lib/repo';
 	import ExternalLink from '$lib/components/ExternalLink.svelte';
 	import { iconByProgrammingLanguage } from '$lib/icons';
+	import SimpleIconComponent from './SimpleIconComponent.svelte';
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
@@ -13,7 +14,7 @@
 	const { project, class: className, ...props }: Props = $props();
 
 	const projectUrl = $derived(repoStringToUrl(project.repo));
-	const icon = $derived(project.lang ? iconByProgrammingLanguage(project.lang) : null);
+	const langIcon = $derived(project.lang ? iconByProgrammingLanguage(project.lang) : null);
 </script>
 
 <li {...props} class={classNames(className, 'bg-background-alt flex flex-col px-3 py-2')}>
@@ -22,11 +23,12 @@
 			<ExternalLink href={projectUrl}>{project.name}</ExternalLink>
 		</h2>
 		<span>
-			{#if icon !== null}
-				<svg role="img" class="inline h-4 w-4" viewBox="0 0 24 24">
-					<title>{icon.title}</title>
-					<path d={icon.path} />
-				</svg>
+			{#if langIcon !== null}
+				<SimpleIconComponent
+					icon={langIcon}
+					fill="var(--color-foreground)"
+					class="inline h-4 w-4"
+				/>
 			{/if}<span class="ml-2 text-sm">{project.lang}</span>
 		</span>
 	</div>

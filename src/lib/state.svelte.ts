@@ -8,14 +8,12 @@ const state = $state<State>({
 	preferredTheme: null,
 });
 
-export const THEME_STORAGE_KEY = 'theme';
-
 export const getThemeName = (): ThemeName => state.preferredTheme ?? 'light';
 export const getTheme = (): Theme => themes[getThemeName()];
 
 export const themeEffect = () => {
 	if (state.preferredTheme !== null) {
-		localStorage.setItem(THEME_STORAGE_KEY, state.preferredTheme);
+		localStorage.theme = state.preferredTheme;
 	}
 
 	const setVar = (name: string, value: string) =>
@@ -30,7 +28,7 @@ export const themeEffect = () => {
 };
 
 export const loadPreferredTheme = () => {
-	const savedThemeName = localStorage.getItem(THEME_STORAGE_KEY);
+	const savedThemeName = localStorage.theme;
 	if (savedThemeName !== null && isThemeName(savedThemeName)) {
 		state.preferredTheme = savedThemeName;
 	}

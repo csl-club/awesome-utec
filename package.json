@@ -53,6 +53,7 @@
 		]
 	},
 	"dependencies": {
+		"@lucide/svelte": "^0.483.0",
 		"classnames": "^2.5.1",
 		"simple-icons": "^14.11.0"
 	}

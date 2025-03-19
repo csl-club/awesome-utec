@@ -1,10 +1,30 @@
 <script lang="ts">
 	import Footer from '$lib/components/layout/Footer.svelte';
+	import state, { getThemeName, loadPreferredTheme, themeEffect } from '$lib/state.svelte';
+	import { onMount } from 'svelte';
 	import '../app.css';
+	import { MoonStar, Sun } from '@lucide/svelte';
+
 	let { children } = $props();
+
+	let ThemeIcon = $derived(getThemeName() === 'dark' ? MoonStar : Sun);
+
+	const switchTheme = () => {
+		const newTheme = getThemeName() === 'dark' ? 'light' : 'dark';
+		state.preferredTheme = newTheme;
+	};
+
+	$effect(themeEffect);
+
+	onMount(loadPreferredTheme);
 </script>
 
-<div class="mx-auto max-w-4xl grow leading-7">
+<div class="p-4 text-right">
+	<button onclick={switchTheme} class="cursor-pointer p-2">
+		<ThemeIcon />
+	</button>
+</div>
+<div class="mx-auto flex max-w-4xl grow flex-col leading-7">
 	{@render children()}
 </div>
 <Footer />

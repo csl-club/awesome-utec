@@ -19,6 +19,7 @@ export interface ProjectData {
 	tags?: string[];
 	summary?: string;
 	repo: string;
+	lang?: string;
 }
 
 export interface Project {
@@ -62,8 +63,7 @@ const completeProjectData = async (
 		(authorId) => allAuthors.find((author) => author.id === authorId)!,
 	);
 
-	let { summary } = projectData;
-	let lang: string | undefined = undefined;
+	let { summary, lang } = projectData;
 
 	const repoInfo = parseRepoInfo(projectData.repo);
 
@@ -79,18 +79,26 @@ const completeProjectData = async (
 				const octokit = new Octokit({ auth: GITHUB_TOKEN });
 				const { data: repoData } = await octokit.rest.repos.get({ ...repoInfo });
 
-				if (repoData.language) lang = repoData.language;
-				if (repoData.description) summary ??= repoData.description;
+				if (repoData.language) {
+					lang ??= repoData.language;
+				}
+				if (repoData.description) {
+					summary ??= repoData.description;
+				}
 				break;
 			}
 			case 'gitlab': {
 				const projId = `${repoInfo.owner}/${repoInfo.repo}`;
 				const gitlab = new Gitlab({});
 
-				const langs = await gitlab.Projects.showLanguages(projId);
-				if (!isEmpty(langs)) lang = maxKeyByValue(langs);
+				if (!lang) {
+					const langs = await gitlab.Projects.showLanguages(projId);
+					if (!isEmpty(langs)) {
+						lang = maxKeyByValue(langs);
+					}
+				}
 
-				if (summary === undefined) {
+				if (!summary) {
 					const projectData = await gitlab.Projects.show(projId);
 					if (projectData.description) summary ??= projectData.description;
 				}

@@ -1,13 +1,25 @@
 <script lang="ts">
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { satisfiesQuery } from '$lib/search';
+	import { on } from 'svelte/events';
 	import type { PageProps } from './$types';
+	import { onMount } from 'svelte';
 
 	let searchQuery = $state('');
+	let searchInput = $state<HTMLInputElement | null>(null);
 
 	const { data }: PageProps = $props();
 
 	const filteredProjects = $derived(data.projects.filter((p) => satisfiesQuery(p, searchQuery)));
+
+	onMount(() =>
+		on(document, 'keydown', (ev) => {
+			if (ev.key === '/' && document.activeElement !== searchInput) {
+				ev.preventDefault();
+				searchInput?.focus();
+			}
+		}),
+	);
 </script>
 
 <svelte:head>
@@ -15,7 +27,7 @@
 </svelte:head>
 
 <main class="font-main mx-auto max-w-4xl px-6 py-8">
-	<h1 class="my-6 text-center text-4xl font-bold">Awesome UTEC</h1>
+	<h1 class="mt-1 mb-6 text-center text-4xl font-bold">Awesome UTEC</h1>
 	<p class="my-10 text-center text-lg">
 		Un compendio de proyectos de computación de la Universidad de Ingeniería y Tecnología.
 	</p>
@@ -25,6 +37,7 @@
 			type="text"
 			placeholder="Buscar..."
 			bind:value={() => searchQuery, (v) => (searchQuery = v.trimStart())}
+			bind:this={searchInput}
 			class="border-foreground border px-2 py-1"
 		/>
 	</div>

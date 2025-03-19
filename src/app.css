@@ -32,7 +32,9 @@
 @theme {
 	--color-background: #eff1f5;
 	--color-background-alt: #e6e9ef;
+	--color-background-alt-2: #dce0e8;
 	--color-foreground: #4c4f69;
+	--color-foreground-muted: #8c8fa1;
 	--font-main: 'Commit Mono', monospace;
 }
 
@@ -44,6 +46,11 @@
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
+		transition-property:
+			color, background-color, border-color, outline-color, text-decoration-color, fill, stroke,
+			--tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+		transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+		transition-duration: var(--tw-duration, var(--default-transition-duration));
 	}
 
 	a:hover {

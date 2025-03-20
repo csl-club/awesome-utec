@@ -1,14 +1,39 @@
 <script lang="ts">
-	import ProjectCard from '$lib/components/ProjectCard.svelte';
-	import { satisfiesQuery } from '$lib/search';
+	import removeAccents from 'remove-accents';
 	import type { PageProps } from './$types';
+	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	import { executeProjectQuery, parseTokens, ProjectMatches } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-
-	let searchQuery = $state('');
+	import state from '$lib/state.svelte';
+	import type { Project } from '$lib/content';
 
 	const { data }: PageProps = $props();
 
-	const filteredProjects = $derived(data.projects.filter((p) => satisfiesQuery(p, searchQuery)));
+	const removeProjectAccents = (proj: Project): Project => ({
+		name: removeAccents(proj.name),
+		authors: proj.authors.map((author) => ({
+			...author,
+			name: removeAccents(author.name),
+		})),
+		summary: removeAccents(proj.summary),
+		tags: proj.tags.map(removeAccents),
+		lang: proj.lang ? removeAccents(proj.lang) : proj.lang,
+		repo: removeAccents(proj.repo),
+	});
+
+	const searchTokens = $derived(parseTokens(state.searchQuery));
+	const projectsWithMatches: [Project, ProjectMatches | null][] = $derived(
+		data.projects.map((proj) => [
+			proj,
+			executeProjectQuery(searchTokens, removeProjectAccents(proj)),
+		]),
+	);
+
+	const filteredProjects = $derived(
+		searchTokens.length === 0
+			? projectsWithMatches
+			: projectsWithMatches.filter(([, matches]) => matches === null || matches.hasSome()),
+	);
 </script>
 
 <svelte:head>
@@ -28,11 +53,11 @@
 	</p>
 
 	<div class="space-x-4 text-center">
-		<SearchInput placeholder="Buscar..." bind:value={searchQuery} class="text-sm" />
+		<SearchInput placeholder="Buscar..." bind:value={state.searchQuery} class="text-sm" />
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-		{#each filteredProjects as project (project.repo)}
+		{#each filteredProjects as [project] (project.repo)}
 			<ProjectCard {project} />
 		{/each}
 	</ul>

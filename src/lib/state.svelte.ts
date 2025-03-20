@@ -2,10 +2,12 @@ import themes, { isThemeName, type Theme, type ThemeName } from '$lib/themes';
 
 export interface State {
 	preferredTheme: ThemeName | null;
+	searchQuery: string;
 }
 
 const state = $state<State>({
 	preferredTheme: null,
+	searchQuery: '',
 });
 
 export const getThemeName = (): ThemeName => state.preferredTheme ?? 'light';

@@ -14,6 +14,15 @@ importers:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      linguist-languages:
+        specifier: ^7.29.0
+        version: 7.29.0
+      polished:
+        specifier: ^4.3.1
+        version: 4.3.1
+      remove-accents:
+        specifier: ^0.5.0
+        version: 0.5.0
       simple-icons:
         specifier: ^14.11.0
         version: 14.11.0
@@ -1532,6 +1541,9 @@ packages:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
 
+  linguist-languages@7.29.0:
+    resolution: {integrity: sha512-KTh6ltVzr3ycnqxWw7zlzy8CqTSrpdymUzGl0EgYxK7cHoRgsX3VrZw4ExCWGCPX3uxxa7kgZwir4zeQkqjdZw==}
+
   locate-character@3.0.0:
     resolution: {integrity: sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA==}
 
@@ -1670,6 +1682,10 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
+  polished@4.3.1:
+    resolution: {integrity: sha512-OBatVyC/N7SCW/FaDHrSd+vn0o5cS855TOmYi4OkdWUMSJCET/xip//ch8xGUvtr3i44X9LVyWwQlRMTN3pwSA==}
+    engines: {node: '>=10'}
+
   postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
     engines: {node: '>= 10'}
@@ -1807,6 +1823,9 @@ packages:
 
   regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
+
+  remove-accents@0.5.0:
+    resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
   resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
@@ -3509,6 +3528,8 @@ snapshots:
 
   lilconfig@2.1.0: {}
 
+  linguist-languages@7.29.0: {}
+
   locate-character@3.0.0: {}
 
   locate-path@6.0.0:
@@ -3613,6 +3634,10 @@ snapshots:
 
   picomatch@4.0.2: {}
 
+  polished@4.3.1:
+    dependencies:
+      '@babel/runtime': 7.26.10
+
   postcss-load-config@3.1.4(postcss@8.5.3):
     dependencies:
       lilconfig: 2.1.0
@@ -3685,6 +3710,8 @@ snapshots:
       strip-indent: 3.0.0
 
   regenerator-runtime@0.14.1: {}
+
+  remove-accents@0.5.0: {}
 
   resolve-from@4.0.0: {}
 

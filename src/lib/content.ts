@@ -26,7 +26,7 @@ export interface Project {
 	name: string;
 	authors: Author[];
 	tags: string[];
-	summary?: string;
+	summary: string;
 	repo: string;
 	lang?: string;
 }
@@ -105,6 +105,10 @@ const completeProjectData = async (
 				break;
 			}
 		}
+	}
+
+	if (!summary) {
+		throw new Error(`'${projectData.name}' does not have a description.`);
 	}
 
 	return {

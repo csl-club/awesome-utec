@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { base } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>Página no encontrada</title>
 </svelte:head>
@@ -7,6 +11,6 @@
 		404 - Página no encontrada :/
 	</h1>
 	<nav class="space-x-6 text-center">
-		<a href="/">Volver al inicio</a>
+		<a href="{base}/">Volver al inicio</a>
 	</nav>
 </main>

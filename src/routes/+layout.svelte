@@ -4,7 +4,6 @@
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { MoonStar, Sun } from '@lucide/svelte';
-	import themes from '$lib/themes';
 	import { initScript } from './theme-init';
 
 	let { children } = $props();
@@ -23,7 +22,7 @@
 
 <svelte:head>
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	{@html initScript(themes)}
+	{@html initScript()}
 </svelte:head>
 
 <div class="p-4 text-right">

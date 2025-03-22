@@ -11,6 +11,7 @@
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
+		addTag: (tag: string) => void;
 	}
 
 	const { project, class: className, ...props }: Props = $props();
@@ -45,7 +46,7 @@
 	<p class="grow text-sm">{project.summary}</p>
 	<ul class="mt-2 flex space-x-4">
 		{#each project.tags as tag (tag)}
-			<li class="bg-background-alt-2 px-2 py-1 text-xs">#{tag}</li>
+			<a href="#project-search" onclick={() => props.addTag(tag)} class="bg-background-alt-2 px-2 py-1 text-xs">#{tag}</a>
 		{/each}
 	</ul>
 </li>

@@ -29,11 +29,17 @@
 		]),
 	);
 
-	const filteredProjects = $derived(
+	const filteredProjects = $derived(() =>
 		searchTokens.length === 0
 			? projectsWithMatches
 			: projectsWithMatches.filter(([, matches]) => matches === null || matches.hasSome()),
 	);
+
+	// Not a reactive stuff, so
+	const addTag = (tag: string) => {
+		var added = `tag:${tag}`;
+		state.searchQuery = state.searchQuery ? `${state.searchQuery} ${added}` : added;
+	};
 </script>
 
 <svelte:head>
@@ -57,8 +63,8 @@
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-		{#each filteredProjects as [project] (project.repo)}
-			<ProjectCard {project} />
+		{#each filteredProjects() as [project] (project.repo)}
+			<ProjectCard addTag={addTag} {project} />
 		{/each}
 	</ul>
 </main>

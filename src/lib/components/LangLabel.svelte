@@ -5,7 +5,7 @@
 	import { colorByProgrammingLanguage, iconByProgrammingLanguage } from '$lib/icons';
 	import { setLightness } from 'polished';
 	import { themeVariables } from '$lib/themes';
-	import state from '$lib/state.svelte';
+	import state from '$lib/svelte/state.svelte';
 
 	export interface Props extends HTMLAttributes<HTMLSpanElement> {
 		lang: string;

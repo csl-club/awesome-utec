@@ -6,6 +6,8 @@
 	import ExternalLink from '$lib/components/ExternalLink.svelte';
 	import { Link } from '@lucide/svelte';
 	import LangLabel from './LangLabel.svelte';
+	import { addTokenToQuery } from '$lib/svelte/search.svelte';
+	import { Token } from '$lib/search';
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
@@ -37,7 +39,11 @@
 	<p class="grow text-sm">{project.summary}</p>
 	<ul class="mt-2 flex space-x-2">
 		{#each project.tags as tag (tag)}
-			<li class="bg-background-alt-2 px-2 py-1 text-xs">#{tag}</li>
+			<li class="bg-background-alt-2 px-2 py-1 text-xs">
+				<button onclick={() => addTokenToQuery(new Token('tag', tag))} class="cursor-pointer">
+					#{tag}
+				</button>
+			</li>
 		{/each}
 	</ul>
 </li>

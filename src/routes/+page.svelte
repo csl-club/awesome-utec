@@ -4,7 +4,7 @@
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { executeProjectQuery, parseTokens } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import state from '$lib/state.svelte';
+	import state from '$lib/svelte/state.svelte';
 	import type { Project } from '$lib/content';
 
 	const { data }: PageProps = $props();

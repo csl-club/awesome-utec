@@ -4,7 +4,7 @@
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { executeProjectQuery, parseTokens } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import state from '$lib/svelte/state.svelte';
+	import globalState from '$lib/svelte/state.svelte';
 	import type { Project } from '$lib/content';
 
 	const { data }: PageProps = $props();
@@ -21,7 +21,11 @@
 		repo: removeAccents(proj.repo),
 	});
 
-	const searchTokens = $derived(parseTokens(state.searchQuery));
+	let searchInput = $state<HTMLInputElement | null>(null);
+
+	const focusInput = () => searchInput?.focus();
+
+	const searchTokens = $derived(parseTokens(globalState.searchQuery));
 
 	const filteredProjects = $derived(
 		searchTokens.length === 0
@@ -49,12 +53,17 @@
 	</p>
 
 	<div class="space-x-4 text-center">
-		<SearchInput placeholder="Buscar..." bind:value={state.searchQuery} class="w-64 text-sm" />
+		<SearchInput
+			placeholder="Buscar..."
+			bind:value={globalState.searchQuery}
+			bind:input={searchInput}
+			class="w-64 text-sm"
+		/>
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
 		{#each filteredProjects as project (project.repo)}
-			<ProjectCard {project} />
+			<ProjectCard {project} {focusInput} />
 		{/each}
 	</ul>
 </main>

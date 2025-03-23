@@ -30,7 +30,7 @@
 		<ThemeIcon />
 	</button>
 </div>
-<div class="mx-auto flex max-w-4xl grow flex-col leading-7">
+<div class="mx-auto flex max-w-4xl grow flex-col leading-relaxed">
 	{@render children()}
 </div>
 <Footer />

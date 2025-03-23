@@ -1,4 +1,4 @@
-import themes, { isThemeName, type Theme, type ThemeName } from '$lib/themes';
+import themes, { isThemeName, themeVariables, type Theme, type ThemeName } from '$lib/themes';
 
 export interface State {
 	preferredTheme: ThemeName | null;
@@ -18,15 +18,12 @@ export const themeEffect = () => {
 		localStorage.theme = state.preferredTheme;
 	}
 
-	const setVar = (name: string, value: string) =>
-		document.documentElement.style.setProperty(name, value);
-
 	const theme = getTheme();
-	setVar('--color-background', theme.background);
-	setVar('--color-background-alt', theme.backgroundAlt);
-	setVar('--color-background-alt-2', theme.backgroundAlt2);
-	setVar('--color-foreground', theme.foreground);
-	setVar('--color-foreground-muted', theme.foregroundMuted);
+
+	for (const keyStr in theme) {
+		const key = keyStr as keyof Theme;
+		document.documentElement.style.setProperty(themeVariables[key as keyof Theme], theme[key]);
+	}
 };
 
 export const loadPreferredTheme = () => {

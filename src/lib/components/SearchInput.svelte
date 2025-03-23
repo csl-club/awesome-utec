@@ -24,7 +24,6 @@
 </script>
 
 <input
-	id="project-search"
 	type="text"
 	{...props}
 	bind:value={() => value, (v) => (value = v.trimStart())}

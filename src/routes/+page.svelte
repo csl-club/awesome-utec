@@ -2,9 +2,9 @@
 	import removeAccents from 'remove-accents';
 	import type { PageProps } from './$types';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
-	import { executeProjectQuery, parseTokens, ProjectMatches } from '$lib/search';
+	import { executeProjectQuery, parseTokens } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import state from '$lib/state.svelte';
+	import state from '$lib/svelte/state.svelte';
 	import type { Project } from '$lib/content';
 
 	const { data }: PageProps = $props();
@@ -22,24 +22,14 @@
 	});
 
 	const searchTokens = $derived(parseTokens(state.searchQuery));
-	const projectsWithMatches: [Project, ProjectMatches | null][] = $derived(
-		data.projects.map((proj) => [
-			proj,
-			executeProjectQuery(searchTokens, removeProjectAccents(proj)),
-		]),
-	);
 
-	const filteredProjects = $derived(() =>
+	const filteredProjects = $derived(
 		searchTokens.length === 0
-			? projectsWithMatches
-			: projectsWithMatches.filter(([, matches]) => matches === null || matches.hasSome()),
+			? data.projects
+			: data.projects.filter((proj) =>
+					executeProjectQuery(searchTokens, removeProjectAccents(proj))!.hasSome(),
+				),
 	);
-
-	// Not a reactive stuff, so
-	const addTag = (tag: string) => {
-		var added = `tag:${tag}`;
-		state.searchQuery = state.searchQuery ? `${state.searchQuery} ${added}` : added;
-	};
 </script>
 
 <svelte:head>
@@ -59,12 +49,12 @@
 	</p>
 
 	<div class="space-x-4 text-center">
-		<SearchInput placeholder="Buscar..." bind:value={state.searchQuery} class="text-sm" />
+		<SearchInput placeholder="Buscar..." bind:value={state.searchQuery} class="w-64 text-sm" />
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-		{#each filteredProjects() as [project] (project.repo)}
-			<ProjectCard addTag={addTag} {project} />
+		{#each filteredProjects as project (project.repo)}
+			<ProjectCard {project} />
 		{/each}
 	</ul>
 </main>

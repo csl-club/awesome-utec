@@ -1,14 +1,25 @@
 import type { Project } from './content';
 
-// TODO: add '#' alias for tag tokens
-// TODO: more tests
-// TODO: add tokens to query (if not already there) via `addToQuery`
 export const TOKEN_TYPES = ['name', 'author', 'summary', 'tag', 'lang'] as const;
 export type TokenType = (typeof TOKEN_TYPES)[number];
 
-export interface Token {
-	type: TokenType | null;
-	text: string;
+export class Token {
+	public constructor(
+		public readonly type: TokenType | null,
+		public readonly text: string,
+	) {
+		if (this.text.match(/\s+/)) {
+			throw new Error('token cannot contain whitespace');
+		}
+	}
+
+	public toString(): string {
+		if (this.type === null) {
+			return this.text;
+		} else {
+			return `${this.type}:${this.text}`;
+		}
+	}
 }
 
 export const isTokenType = (s: string): s is TokenType => {

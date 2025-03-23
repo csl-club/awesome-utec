@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '$lib/components/layout/Footer.svelte';
-	import state, { getThemeName, loadPreferredTheme, themeEffect } from '$lib/state.svelte';
+	import state, { getThemeName, loadPreferredTheme, themeEffect } from '$lib/svelte/state.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { ArrowUpIcon, MoonStar, Sun } from '@lucide/svelte';
@@ -43,7 +43,7 @@
 
 <svelte:head>
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	{@html initScript(themes)}
+	{@html initScript()}
 </svelte:head>
 
 <div class="p-4 flex align-center justify-between">
@@ -55,7 +55,7 @@
 		<ThemeIcon/>
 	</button>
 </div>
-<div class="mx-auto flex max-w-4xl grow flex-col leading-7">
+<div class="mx-auto flex max-w-4xl grow flex-col leading-relaxed">
 	{@render children()}
 </div>
 <Footer />

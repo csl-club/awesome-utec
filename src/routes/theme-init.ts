@@ -1,14 +1,21 @@
-export const initScript = (themes: unknown) => `
+import themes, { themeVariables, type Theme } from '$lib/themes';
+
+export const initScript = () => {
+	const themesStr = JSON.stringify(themes);
+	const themeKeys = Object.keys(themeVariables) as (keyof Theme)[];
+	const setVarLines = themeKeys.map(
+		(key) =>
+			`document.documentElement.style.setProperty('${themeVariables[key]}', initialTheme.${key});`,
+	);
+
+	return `
 <script> 
   (function() {
-    var initialTheme = (${JSON.stringify(themes)})[localStorage.theme]
+    var initialTheme = (${themesStr})[localStorage.theme]
     if (initialTheme) {
-    document.documentElement.style.setProperty('--color-background', initialTheme.background);
-    document.documentElement.style.setProperty('--color-background-alt', initialTheme.backgroundAlt);
-    document.documentElement.style.setProperty('--color-background-alt-2', initialTheme.backgroundAlt2);
-    document.documentElement.style.setProperty('--color-foreground', initialTheme.foreground);
-    document.documentElement.style.setProperty('--color-foreground-muted', initialTheme.foregroundMuted);
+      ${setVarLines.join('\n')}
     }
   })()
 </script>
 `;
+};

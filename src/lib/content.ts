@@ -5,7 +5,6 @@ import { Octokit } from '@octokit/rest';
 import { Gitlab } from '@gitbeaker/rest';
 import { parseRepoInfo } from './repo';
 import { isEmpty, maxKeyByValue } from './object';
-import { GITHUB_TOKEN } from '$env/static/private';
 
 export interface Author {
 	id: string;
@@ -44,9 +43,9 @@ export const getContent = async (): Promise<ContentData> => {
 	return YAML.parse(fileContents);
 };
 
-export const getAllProjects = async (): Promise<Project[]> => {
+export const getAllProjects = async (token: string): Promise<Project[]> => {
 	const { projects, authors } = await getContent();
-	return await Promise.all(projects.map((proj) => completeProjectData(proj, authors)));
+	return await Promise.all(projects.map((proj) => completeProjectData(token, proj, authors)));
 };
 
 export const getAllAuthors = async (): Promise<Author[]> => {
@@ -55,6 +54,7 @@ export const getAllAuthors = async (): Promise<Author[]> => {
 };
 
 const completeProjectData = async (
+	token: string,
 	projectData: ProjectData,
 	allAuthors: Author[],
 ): Promise<Project> => {
@@ -70,13 +70,13 @@ const completeProjectData = async (
 	if (repoInfo !== null) {
 		switch (repoInfo.type) {
 			case 'github': {
-				if (!GITHUB_TOKEN) {
+				if (!token) {
 					console.warn(
 						'GITHUB_TOKEN environment variable not found. Proceeding without authentication',
 					);
 				}
 
-				const octokit = new Octokit({ auth: GITHUB_TOKEN });
+				const octokit = new Octokit({ auth: token });
 				const { data: repoData } = await octokit.rest.repos.get({ ...repoInfo });
 
 				if (repoData.language) {

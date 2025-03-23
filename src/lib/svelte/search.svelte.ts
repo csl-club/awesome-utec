@@ -10,9 +10,10 @@ export const addTokenToQuery = (token: Token): boolean => {
 		return false;
 	}
 
-	if (state.searchQuery.length !== 0) {
+	if (state.searchQuery.length !== 0 && state.searchQuery.at(-1)! !== ' ') {
 		state.searchQuery += ' ';
 	}
-	state.searchQuery += token.toString();
+
+	state.searchQuery += token.toString() + ' ';
 	return true;
 };

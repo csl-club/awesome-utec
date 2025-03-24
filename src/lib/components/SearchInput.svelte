@@ -6,17 +6,23 @@
 
 	export interface Props extends HTMLInputAttributes {
 		focusOnSlash?: boolean;
+		input: HTMLInputElement | null;
 	}
 
-	let { focusOnSlash = true, class: className, value = $bindable(''), ...props }: Props = $props();
-	let element = $state<HTMLInputElement | null>(null);
+	let {
+		focusOnSlash = true,
+		input = $bindable(null),
+		class: className,
+		value = $bindable(''),
+		...props
+	}: Props = $props();
 
 	onMount(() => {
 		if (focusOnSlash) {
 			return on(document, 'keydown', (ev) => {
-				if (ev.key === '/' && document.activeElement !== element) {
+				if (ev.key === '/' && document.activeElement !== input) {
 					ev.preventDefault();
-					element?.focus();
+					input?.focus();
 				}
 			});
 		}
@@ -28,5 +34,5 @@
 	{...props}
 	bind:value={() => value, (v) => (value = v.trimStart())}
 	class={classNames('border-foreground border px-2 py-1', className)}
-	bind:this={element}
+	bind:this={input}
 />

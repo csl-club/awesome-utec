@@ -1,121 +1,130 @@
 import path from 'node:path';
-import fs from 'node:fs/promises';
-import YAML from 'yaml';
+import { parse as parseYaml } from 'yaml';
 import { Octokit } from '@octokit/rest';
 import { Gitlab } from '@gitbeaker/rest';
-import { parseRepoInfo } from './repo';
-import { isEmpty, maxKeyByValue } from './object';
+import { parseRepoInfo, type RepoInfo, type RepoType } from './repo';
+import { readFile } from 'node:fs/promises';
+import { isEmpty, maxBy, merge } from 'lodash-es';
+import z from 'zod';
 
-export interface Author {
-	id: string;
-	name: string;
-	email?: string;
-}
+export const Author = z.object({
+	id: z.string(),
+	name: z.string(),
+	email: z.string().email().optional(),
+});
 
-export interface ProjectData {
-	name: string;
-	authors: string[];
-	tags?: string[];
-	summary?: string;
-	repo: string;
-	lang?: string;
-}
+export type Author = z.infer<typeof Author>;
 
-export interface Project {
-	name: string;
-	authors: Author[];
-	tags: string[];
-	summary: string;
-	repo: string;
-	lang?: string;
-}
+export const ProjectData = z.object({
+	name: z.string(),
+	authors: z.array(z.string()),
+	repo: z.string(),
+	summary: z.string().optional(),
+	tags: z.array(z.string()).optional().default([]),
+	lang: z.string().optional(),
+});
 
-export interface ContentData {
-	authors: Author[];
-	projects: ProjectData[];
+export type ProjectData = z.infer<typeof ProjectData>;
+
+export const Project = z.object({
+	name: z.string(),
+	authors: z.array(Author),
+	repo: z.string(),
+	summary: z.string(),
+	tags: z.array(z.string()),
+	lang: z.string().optional(),
+});
+
+export type Project = z.infer<typeof Project>;
+
+export const ContentData = z.object({
+	authors: z.array(Author),
+	projects: z.array(ProjectData),
+});
+
+export type ContentData = z.infer<typeof ContentData>;
+
+export interface AuthConfig {
+	githubToken?: string;
 }
 
 export const contentFile = path.join(process.cwd(), 'content.yml');
 
-// TODO: content schema validation
-export const getContent = async (): Promise<ContentData> => {
-	const fileContents = await fs.readFile(contentFile, 'utf-8');
-	return YAML.parse(fileContents);
+export const getContentData = async (): Promise<ContentData> => {
+	const fileContents = await readFile(contentFile, 'utf-8');
+	const parsedContent: unknown = parseYaml(fileContents);
+	return unwrapZodResult(ContentData.safeParse(parsedContent));
 };
 
-export const getAllProjects = async (token: string): Promise<Project[]> => {
-	const { projects, authors } = await getContent();
-	return await Promise.all(projects.map((proj) => completeProjectData(token, proj, authors)));
+export const getAllProjects = async (auth: AuthConfig): Promise<Project[]> => {
+	const { projects, authors } = await getContentData();
+	return await Promise.all(projects.map((proj) => completeProjectData(auth, proj, authors)));
 };
 
-export const getAllAuthors = async (): Promise<Author[]> => {
-	const content = await getContent();
-	return content.authors;
+type RemoteFetcher = (repoInfo: RepoInfo, auth: AuthConfig) => Promise<Partial<ProjectData>>;
+
+const remoteFetchers: Record<RepoType, RemoteFetcher> = {
+	github: async (repoInfo, auth) => {
+		if (!auth.githubToken) {
+			console.warn('GitHub authentication not provided; beware of rate limits.');
+		}
+
+		const octokit = new Octokit({ auth: auth.githubToken });
+		const { data } = await octokit.rest.repos.get({ ...repoInfo });
+
+		return {
+			lang: data.language ?? undefined,
+			summary: data.description ?? undefined,
+		};
+	},
+	gitlab: async (repoInfo) => {
+		const projId = `${repoInfo.owner}/${repoInfo.repo}`;
+		const gitlab = new Gitlab({});
+
+		const projectData = await gitlab.Projects.show(projId);
+		const langs = await gitlab.Projects.showLanguages(projId);
+
+		const mainLang = !isEmpty(langs) ? maxBy(Object.keys(langs), (key) => langs[key]) : undefined;
+
+		return {
+			lang: mainLang,
+			summary: projectData.description,
+		};
+	},
 };
 
 const completeProjectData = async (
-	token: string,
+	auth: AuthConfig,
 	projectData: ProjectData,
 	allAuthors: Author[],
 ): Promise<Project> => {
-	const tags = projectData.tags?.map((s) => s.toLowerCase()) ?? [];
-	const authors = projectData.authors.map(
-		(authorId) => allAuthors.find((author) => author.id === authorId)!,
-	);
-
-	let { summary, lang } = projectData;
+	projectData.tags ??= [];
 
 	const repoInfo = parseRepoInfo(projectData.repo);
 
 	if (repoInfo !== null) {
-		switch (repoInfo.type) {
-			case 'github': {
-				if (!token) {
-					console.warn(
-						'GITHUB_TOKEN environment variable not found. Proceeding without authentication',
-					);
-				}
-
-				const octokit = new Octokit({ auth: token });
-				const { data: repoData } = await octokit.rest.repos.get({ ...repoInfo });
-
-				if (repoData.language) {
-					lang ??= repoData.language;
-				}
-				if (repoData.description) {
-					summary ??= repoData.description;
-				}
-				break;
-			}
-			case 'gitlab': {
-				const projId = `${repoInfo.owner}/${repoInfo.repo}`;
-				const gitlab = new Gitlab({});
-
-				if (!lang) {
-					const langs = await gitlab.Projects.showLanguages(projId);
-					if (!isEmpty(langs)) {
-						lang = maxKeyByValue(langs);
-					}
-				}
-
-				if (!summary) {
-					const projectData = await gitlab.Projects.show(projId);
-					if (projectData.description) summary ??= projectData.description;
-				}
-				break;
-			}
-		}
+		const remoteData = await remoteFetchers[repoInfo.type](repoInfo, auth);
+		projectData = merge(remoteData, projectData);
 	}
 
-	if (!summary) {
-		throw new Error(`'${projectData.name}' does not have a description.`);
-	}
+	const authors = projectData.authors.map(
+		(authorId) => allAuthors.find((author) => author.id === authorId)!,
+	);
 
-	return {
+	const finalData = {
 		...projectData,
-		summary,
 		authors,
-		tags,
-		lang,
 	};
+
+	return unwrapZodResult(Project.safeParse(finalData));
+};
+
+const unwrapZodResult = <T>(result: z.SafeParseReturnType<unknown, T>): T => {
+	if (result.success) {
+		return result.data;
+	} else {
+		const subErrMessages = result.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
+		console.error(`Validation failed: ${subErrMessages.join('; ')}`);
+		throw new Error('validation error');
+	}
 };

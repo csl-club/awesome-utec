@@ -1,4 +1,5 @@
-export type RepoType = 'github' | 'gitlab';
+export const REPO_TYPES = ['github', 'gitlab'] as const;
+export type RepoType = (typeof REPO_TYPES)[number];
 
 export interface RepoInfo {
 	type: RepoType;
@@ -7,7 +8,7 @@ export interface RepoInfo {
 }
 
 export const isValidRepoType = (type: string): type is RepoType =>
-	['github', 'gitlab'].includes(type);
+	(REPO_TYPES as readonly string[]).includes(type);
 
 export const repoStringToUrl = (repoString: string) => {
 	const repoInfo = parseRepoInfo(repoString);
@@ -36,7 +37,6 @@ export const parseRepoInfo = (repoString: string): RepoInfo | null => {
 	const [owner, repo] = repoString.substring(sepIndex + 1).split('/');
 
 	if (!isValidRepoType(type)) {
-		// Whatever it is, not valid.
 		return null;
 	}
 

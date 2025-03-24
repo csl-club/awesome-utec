@@ -11,9 +11,16 @@
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
+		focusInput: () => void;
 	}
 
-	const { project, class: className, ...props }: Props = $props();
+	const { project, focusInput, class: className, ...props }: Props = $props();
+
+	const onTagClick = (tag: string) => {
+		addTokenToQuery(new Token('tag', tag));
+		focusInput();
+	};
+
 	const projectUrl = $derived(repoStringToUrl(project.repo));
 </script>
 
@@ -40,7 +47,7 @@
 	<ul class="mt-2 flex space-x-2">
 		{#each project.tags as tag (tag)}
 			<li class="bg-background-alt-2 px-2 py-1 text-xs">
-				<button onclick={() => addTokenToQuery(new Token('tag', tag))} class="cursor-pointer">
+				<button onclick={() => onTagClick(tag)} class="cursor-pointer">
 					#{tag}
 				</button>
 			</li>

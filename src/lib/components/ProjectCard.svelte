@@ -11,14 +11,12 @@
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
-		focusInput: () => void;
 	}
 
-	const { project, focusInput, class: className, ...props }: Props = $props();
+	const { project, class: className, ...props }: Props = $props();
 
 	const onTagClick = (tag: string) => {
 		addTokenToQuery(new Token('tag', tag));
-		focusInput();
 	};
 
 	const projectUrl = $derived(repoStringToUrl(project.repo));

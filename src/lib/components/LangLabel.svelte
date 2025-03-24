@@ -5,7 +5,9 @@
 	import { colorByProgrammingLanguage, iconByProgrammingLanguage } from '$lib/icons';
 	import { setLightness } from 'polished';
 	import { themeVariables } from '$lib/themes';
-	import state from '$lib/svelte/global-state.svelte';
+	import globalState from '$lib/svelte/global-state.svelte';
+	import { addTokenToQuery } from '$lib/svelte/search.svelte';
+	import { Token } from '$lib/search';
 
 	export interface Props extends HTMLAttributes<HTMLSpanElement> {
 		lang: string;
@@ -28,7 +30,7 @@
 		}
 
 		const fgColor =
-			state.preferredTheme === 'dark'
+			globalState.preferredTheme === 'dark'
 				? `var(${themeVariables.background})`
 				: `var(${themeVariables.foreground})`;
 
@@ -36,9 +38,10 @@
 	});
 </script>
 
-<span
+<button
 	style={colors ? `background-color: ${colors.bgColor}; color: ${colors.fgColor}` : ''}
-	class={classNames('h-auto px-2 py-1 text-xs text-nowrap', className)}
+	class={classNames('h-auto cursor-pointer px-2 py-1 text-xs text-nowrap', className)}
+	onclick={() => addTokenToQuery(new Token('lang', lang.toLowerCase()))}
 	{...props}
 >
 	{#if icon !== null}
@@ -47,4 +50,4 @@
 	<span>
 		{lang}
 	</span>
-</span>
+</button>

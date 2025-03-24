@@ -7,10 +7,6 @@
 
 	const { data }: PageProps = $props();
 
-	let searchInput = $state<HTMLInputElement | null>(null);
-
-	const focusInput = () => searchInput?.focus();
-
 	const filteredProjects = $derived(
 		data.projects.filter(doesProjectMatchQuery(globalState.searchQuery)),
 	);
@@ -36,14 +32,14 @@
 		<SearchInput
 			placeholder="Buscar..."
 			bind:value={globalState.searchQuery}
-			bind:input={searchInput}
+			bind:input={globalState.searchInput}
 			class="w-64 text-sm"
 		/>
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
 		{#each filteredProjects as project (project.repo)}
-			<ProjectCard {project} {focusInput} />
+			<ProjectCard {project} />
 		{/each}
 	</ul>
 </main>

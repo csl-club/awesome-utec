@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '$lib/components/layout/Footer.svelte';
-	import state, {
+	import globalState, {
 		getThemeName,
 		loadPreferredTheme,
 		themeEffect,
@@ -18,7 +18,7 @@
 
 	const switchTheme = () => {
 		const newTheme = getThemeName() === 'dark' ? 'light' : 'dark';
-		state.preferredTheme = newTheme;
+		globalState.preferredTheme = newTheme;
 	};
 
 	$effect(themeEffect);

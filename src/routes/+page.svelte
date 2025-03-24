@@ -1,38 +1,18 @@
 <script lang="ts">
-	import removeAccents from 'remove-accents';
 	import type { PageProps } from './$types';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
-	import { executeProjectQuery, parseTokens } from '$lib/search';
+	import { doesProjectMatchQuery } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
 	import globalState from '$lib/svelte/state.svelte';
-	import type { Project } from '$lib/content';
 
 	const { data }: PageProps = $props();
-
-	const removeProjectAccents = (proj: Project): Project => ({
-		name: removeAccents(proj.name),
-		authors: proj.authors.map((author) => ({
-			...author,
-			name: removeAccents(author.name),
-		})),
-		summary: removeAccents(proj.summary),
-		tags: proj.tags.map(removeAccents),
-		lang: proj.lang ? removeAccents(proj.lang) : proj.lang,
-		repo: removeAccents(proj.repo),
-	});
 
 	let searchInput = $state<HTMLInputElement | null>(null);
 
 	const focusInput = () => searchInput?.focus();
 
-	const searchTokens = $derived(parseTokens(globalState.searchQuery));
-
 	const filteredProjects = $derived(
-		searchTokens.length === 0
-			? data.projects
-			: data.projects.filter((proj) =>
-					executeProjectQuery(searchTokens, removeProjectAccents(proj))!.hasSome(),
-				),
+		data.projects.filter(doesProjectMatchQuery(globalState.searchQuery)),
 	);
 </script>
 

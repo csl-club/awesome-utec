@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Project } from '$lib/content';
-	import classNames from 'classnames';
 	import type { HTMLLiAttributes } from 'svelte/elements';
 	import { repoStringToUrl } from '$lib/repo';
 	import ExternalLink from '$lib/components/ExternalLink.svelte';
@@ -22,7 +21,7 @@
 	const projectUrl = $derived(repoStringToUrl(project.repo));
 </script>
 
-<li {...props} class={classNames(className, 'bg-background-alt flex flex-col space-y-2 px-4 py-2')}>
+<li {...props} class={['bg-background-alt flex flex-col space-y-2 px-4 py-2', className]}>
 	<div class="flex items-start justify-between">
 		<h2 class="text-xl font-semibold">
 			<ExternalLink href={projectUrl}>

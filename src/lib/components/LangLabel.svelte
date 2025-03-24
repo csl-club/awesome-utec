@@ -1,5 +1,4 @@
 <script lang="ts">
-	import classNames from 'classnames';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import SimpleIconComponent from './SimpleIconComponent.svelte';
 	import { colorByProgrammingLanguage, iconByProgrammingLanguage } from '$lib/icons';
@@ -18,8 +17,6 @@
 	const icon = $derived(iconByProgrammingLanguage(lang));
 
 	const colors = $derived.by(() => {
-		if (!lang) return null;
-
 		const baseColor = colorByProgrammingLanguage(lang);
 		let bgColor: string;
 
@@ -39,8 +36,9 @@
 </script>
 
 <button
-	style={colors ? `background-color: ${colors.bgColor}; color: ${colors.fgColor}` : ''}
-	class={classNames('h-auto cursor-pointer px-2 py-1 text-xs text-nowrap', className)}
+	style:color={colors.fgColor}
+	style:background-color={colors.bgColor}
+	class={['h-auto cursor-pointer px-2 py-1 text-xs text-nowrap', className]}
 	onclick={() => addTokenToQuery(new Token('lang', lang.toLowerCase()))}
 	{...props}
 >

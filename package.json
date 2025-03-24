@@ -59,7 +59,6 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.483.0",
-		"classnames": "^2.5.1",
 		"dotenv": "^16.4.7",
 		"linguist-languages": "^7.29.0",
 		"polished": "^4.3.1",

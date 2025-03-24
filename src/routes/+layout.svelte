@@ -1,6 +1,10 @@
 <script lang="ts">
 	import Footer from '$lib/components/layout/Footer.svelte';
-	import state, { getThemeName, loadPreferredTheme, themeEffect } from '$lib/svelte/state.svelte';
+	import state, {
+		getThemeName,
+		loadPreferredTheme,
+		themeEffect,
+	} from '$lib/svelte/global-state.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { Download, MoonStar, Sun } from '@lucide/svelte';

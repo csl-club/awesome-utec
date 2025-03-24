@@ -3,7 +3,7 @@
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { doesProjectMatchQuery } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import globalState from '$lib/svelte/state.svelte';
+	import globalState from '$lib/svelte/global-state.svelte';
 
 	const { data }: PageProps = $props();
 

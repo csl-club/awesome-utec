@@ -1,5 +1,5 @@
 import { parseTokens, type Token } from '$lib/search';
-import state from '$lib/svelte/state.svelte';
+import state from '$lib/svelte/global-state.svelte';
 
 export const getSearchTokens = (): Token[] => parseTokens(state.searchQuery);
 

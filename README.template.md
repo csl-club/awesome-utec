@@ -3,11 +3,13 @@
 Un compendio de proyectos de computación de la Universidad de Ingeniería y Tecnología.
 
 ## Índice
-<!-- $index$ --> 
+
+<!-- %INDEX% -->
 
 ## Proyectos
 
-<!-- $projects::- %name% por %authors%: %summary%$ -->
+<!-- %PROJECTS% -->
 
 ## Licencia
-El código de la página está bajo los derechos del Club de Software Libre, bautizado con la licencia MIT.
+
+El código de este proyecto está bajo los derechos del Club de Software Libre y bautizado con la licencia MIT.

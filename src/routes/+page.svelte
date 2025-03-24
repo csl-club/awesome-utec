@@ -7,7 +7,6 @@
 	import globalState from '$lib/svelte/state.svelte';
 	import type { Project } from '$lib/content';
 
-
 	const { data }: PageProps = $props();
 
 	const removeProjectAccents = (proj: Project): Project => ({

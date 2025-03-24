@@ -6,6 +6,7 @@
 	import { Download, MoonStar, Sun } from '@lucide/svelte';
 	import { initScript } from './theme-init';
 	import type { LayoutProps } from './$types';
+	import { base } from '$app/paths';
 
 	let { children }: LayoutProps = $props();
 
@@ -27,7 +28,12 @@
 </svelte:head>
 
 <div class="align-center flex justify-between p-4">
-	<a title="Download README" href="/README.md" download="README.md" class="cursor-pointer p-2">
+	<a
+		title="Download README"
+		href="{base}/README.md"
+		download="README.md"
+		class="cursor-pointer p-2"
+	>
 		<Download />
 	</a>
 

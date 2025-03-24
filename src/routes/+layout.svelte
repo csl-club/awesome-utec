@@ -29,7 +29,7 @@
 
 <div class="align-center flex justify-between p-4">
 	<a
-		title="Download README"
+		title="Descargar README"
 		href="{base}/README.md"
 		download="README.md"
 		class="cursor-pointer p-2"
@@ -37,7 +37,7 @@
 		<Download />
 	</a>
 
-	<button title="Switch theme" onclick={switchTheme} class="cursor-pointer p-2">
+	<button title="Cambiar de tema" onclick={switchTheme} class="cursor-pointer p-2">
 		<ThemeIcon />
 	</button>
 </div>

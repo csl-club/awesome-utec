@@ -33,11 +33,19 @@
 </svelte:head>
 
 <main class="font-main mx-auto max-w-4xl px-6 py-4">
-	<h1 class="mb-4 text-center text-4xl font-bold">Awesome UTEC</h1>
 	<div class="text-center">
-		<a href="https://awesome.re" aria-label="Awesome">
-			<enhanced:img src="$lib/assets/img/awesome.svg" alt="" class="inline" />
-		</a>
+		<div class="relative inline-block">
+			<h1 class="mx-auto mb-4 text-center text-4xl font-bold">Awesome UTEC</h1>
+			<a
+				href="https://awesome.re"
+				aria-label="Awesome"
+				class="motion-safe:animate-grow absolute -right-2 -bottom-1 translate-x-1/2 -rotate-12"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<enhanced:img src="$lib/assets/img/awesome.svg" alt="" class="inline" />
+			</a>
+		</div>
 	</div>
 
 	<p class="my-10 text-center text-lg">

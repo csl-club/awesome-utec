@@ -28,6 +28,16 @@
 	font-style: italic;
 }
 
+@keyframes grow {
+	from {
+		transform: none;
+	}
+
+	to {
+		transform: scale(110%);
+	}
+}
+
 @theme {
 	--color-background: #eff1f5;
 	--color-background-alt: #e6e9ef;
@@ -35,6 +45,8 @@
 	--color-foreground: #4c4f69;
 	--color-foreground-muted: #8c8fa1;
 	--font-main: 'Commit Mono', monospace;
+
+	--animate-grow: grow 0.5s ease infinite alternate;
 }
 
 @layer base {

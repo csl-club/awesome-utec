@@ -26,7 +26,7 @@ export const projectSorters: Readonly<Record<SortType, Sorter<Project>>> = {
 						: pa.lang.localeCompare(pb.lang),
 	},
 	default: {
-		displayName: 'N/A',
+		displayName: '-',
 		sort: () => 0,
 	},
 } as const;

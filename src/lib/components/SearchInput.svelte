@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { on } from 'svelte/events';
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import classNames from 'classnames';
+	import { on } from 'svelte/events';
 
 	export interface Props extends HTMLInputAttributes {
 		focusOnSlash?: boolean;
@@ -33,6 +32,6 @@
 	type="text"
 	{...props}
 	bind:value={() => value, (v) => (value = v.trimStart())}
-	class={classNames('border-foreground border px-2 py-1', className)}
+	class={['border-foreground border px-2 py-1', className]}
 	bind:this={input}
 />

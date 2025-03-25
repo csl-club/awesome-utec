@@ -1,11 +1,12 @@
 <script lang="ts">
-	import classNames from 'classnames';
-	import type { HTMLAttributes } from 'svelte/elements';
-	import SimpleIconComponent from './SimpleIconComponent.svelte';
 	import { colorByProgrammingLanguage, iconByProgrammingLanguage } from '$lib/icons';
-	import { setLightness } from 'polished';
+	import { Token } from '$lib/search';
+	import globalState from '$lib/svelte/global-state.svelte';
+	import { addTokenToQuery } from '$lib/svelte/search.svelte';
 	import { themeVariables } from '$lib/themes';
-	import state from '$lib/svelte/state.svelte';
+	import SimpleIconComponent from './SimpleIconComponent.svelte';
+	import { setLightness } from 'polished';
+	import type { HTMLAttributes } from 'svelte/elements';
 
 	export interface Props extends HTMLAttributes<HTMLSpanElement> {
 		lang: string;
@@ -16,8 +17,6 @@
 	const icon = $derived(iconByProgrammingLanguage(lang));
 
 	const colors = $derived.by(() => {
-		if (!lang) return null;
-
 		const baseColor = colorByProgrammingLanguage(lang);
 		let bgColor: string;
 
@@ -28,7 +27,7 @@
 		}
 
 		const fgColor =
-			state.preferredTheme === 'dark'
+			globalState.preferredTheme === 'dark'
 				? `var(${themeVariables.background})`
 				: `var(${themeVariables.foreground})`;
 
@@ -36,9 +35,11 @@
 	});
 </script>
 
-<span
-	style={colors ? `background-color: ${colors.bgColor}; color: ${colors.fgColor}` : ''}
-	class={classNames('h-auto px-2 py-1 text-xs text-nowrap', className)}
+<button
+	style:color={colors.fgColor}
+	style:background-color={colors.bgColor}
+	class={['h-auto cursor-pointer px-2 py-1 text-xs text-nowrap', className]}
+	onclick={() => addTokenToQuery(new Token('lang', lang.toLowerCase()))}
 	{...props}
 >
 	{#if icon !== null}
@@ -47,4 +48,4 @@
 	<span>
 		{lang}
 	</span>
-</span>
+</button>

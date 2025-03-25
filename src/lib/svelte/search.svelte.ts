@@ -1,7 +1,7 @@
 import { parseTokens, type Token } from '$lib/search';
-import state from '$lib/svelte/state.svelte';
+import globalState from '$lib/svelte/global-state.svelte';
 
-export const getSearchTokens = (): Token[] => parseTokens(state.searchQuery);
+export const getSearchTokens = (): Token[] => parseTokens(globalState.searchQuery);
 
 export const addTokenToQuery = (token: Token): boolean => {
 	const tokens = getSearchTokens();
@@ -10,10 +10,12 @@ export const addTokenToQuery = (token: Token): boolean => {
 		return false;
 	}
 
-	if (state.searchQuery.length !== 0 && state.searchQuery.at(-1)! !== ' ') {
-		state.searchQuery += ' ';
+	if (globalState.searchQuery.length !== 0 && globalState.searchQuery.at(-1)! !== ' ') {
+		globalState.searchQuery += ' ';
 	}
 
-	state.searchQuery += token.toString() + ' ';
+	globalState.searchQuery += token.toString() + ' ';
+
+	globalState.searchInput?.focus();
 	return true;
 };

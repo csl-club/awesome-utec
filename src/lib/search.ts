@@ -1,4 +1,5 @@
 import type { Project } from './content';
+import removeAccents from 'remove-accents';
 
 export const TOKEN_TYPES = ['name', 'author', 'summary', 'tag', 'lang'] as const;
 export type TokenType = (typeof TOKEN_TYPES)[number];
@@ -63,98 +64,43 @@ export const parseTokens = (query: string): Token[] => {
 	return words.map(parseToken).filter((t) => t !== null);
 };
 
-export class Match {
-	public constructor(
-		public start: number,
-		public end: number,
-	) {}
-}
+const normalizeText = (text: string) => removeAccents(text).toLowerCase();
 
-export class ProjectMatches {
-	public constructor(
-		public readonly name: Match[],
-		public readonly authors: Match[][],
-		public readonly tags: Match[][],
-		public readonly summary: Match[],
-		public readonly lang?: Match[],
-	) {}
-
-	public hasSome(): boolean {
-		return (
-			this.name.length !== 0 ||
-			this.authors.some((matches) => matches.length !== 0) ||
-			this.tags.some((matches) => matches.length !== 0) ||
-			this.summary.length !== 0 ||
-			(this.lang !== undefined && this.lang.length !== 0)
-		);
-	}
-}
-
-export const mergeMatches = (matches: Match[]): Match[] => {
-	if (matches.length === 0) {
-		return [];
-	}
-
-	const sortedMatches = matches.toSorted((a, b) => a.start - b.start);
-	const out: Match[] = [sortedMatches[0]];
-
-	for (let i = 1; i < sortedMatches.length; i++) {
-		const curTail = out.at(-1)!;
-		const nextMatch = sortedMatches[i];
-
-		if (nextMatch.start <= curTail.end) {
-			curTail.end = Math.max(curTail.end, nextMatch.end);
-		} else {
-			out.push(nextMatch);
-		}
-	}
-
-	return out;
+const matchesToken = (token: Token) => (text: string) => {
+	return normalizeText(text).includes(token.text);
 };
 
-export const findMatches = (searchValue: string, str: string): Match[] => {
-	if (searchValue.length === 0) {
-		throw new Error('search value cannot be empty');
-	}
+export const doesProjectMatchToken =
+	(project: Project) =>
+	(token: Token): boolean => {
+		const matcher = matchesToken(token);
+		const authorStrings = project.authors.flatMap((author) => [author.name, author.id]);
 
-	str = str.toLowerCase();
-
-	const out: Match[] = [];
-	let pos = -1;
-
-	while (true) {
-		pos = str.indexOf(searchValue, pos + 1);
-		if (pos === -1) {
-			break;
+		switch (token.type) {
+			case 'name':
+				return matcher(project.name);
+			case 'author':
+				return authorStrings.some(matcher);
+			case 'tag':
+				return project.tags.some(matcher);
+			case 'summary':
+				return matcher(project.summary);
+			case 'lang':
+				return project.lang !== undefined && matcher(project.lang);
+			case null:
+				// Can match anything
+				return [
+					project.name,
+					...authorStrings,
+					...project.tags,
+					project.summary,
+					project.lang ?? '',
+				].some(matcher);
 		}
-		out.push(new Match(pos, pos + searchValue.length));
-	}
+	};
 
-	return out;
-};
-
-export const doFullQuery = (tokens: Token[], str: string): Match[] =>
-	tokens.map((token) => findMatches(token.text, str)).flat();
-
-export const isTokenOfType = (type: TokenType) => (token: Token) =>
-	token.type === null || token.type === type;
-
-export const executeProjectQuery = (tokens: Token[], project: Project): ProjectMatches | null => {
-	if (tokens.length === 0) {
-		return null;
-	}
-
-	const nameTokens = tokens.filter(isTokenOfType('name'));
-	const summaryTokens = tokens.filter(isTokenOfType('summary'));
-	const authorTokens = tokens.filter(isTokenOfType('author'));
-	const tagsTokens = tokens.filter(isTokenOfType('tag'));
-	const langTokens = tokens.filter(isTokenOfType('lang'));
-
-	const nameMatches = doFullQuery(nameTokens, project.name);
-	const summaryMatches = doFullQuery(summaryTokens, project.summary);
-	const authorMatches = project.authors.map((author) => doFullQuery(authorTokens, author.name));
-	const tagsMatches = project.tags.map((tag) => doFullQuery(tagsTokens, tag));
-	const langMatches = project.lang ? doFullQuery(langTokens, project.lang) : undefined;
-
-	return new ProjectMatches(nameMatches, authorMatches, tagsMatches, summaryMatches, langMatches);
+export const doesProjectMatchQuery = (query: string) => (project: Project) => {
+	const tokens = parseTokens(query);
+	const matcher = doesProjectMatchToken(project);
+	return tokens.every(matcher);
 };

@@ -1,12 +1,16 @@
 <script lang="ts">
 	import Footer from '$lib/components/layout/Footer.svelte';
-	import state, { getThemeName, loadPreferredTheme, themeEffect } from '$lib/svelte/state.svelte';
+	import globalState, {
+		getThemeName,
+		loadPreferredTheme,
+		themeEffect,
+	} from '$lib/svelte/global-state.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
-	import { Download, MoonStar, Sun } from '@lucide/svelte';
-	import { initScript } from './theme-init';
-	import type { LayoutProps } from './$types';
 	import { base } from '$app/paths';
+	import type { LayoutProps } from './$types';
+	import { initScript } from './theme-init';
+	import { Download, MoonStar, Sun } from '@lucide/svelte';
 
 	let { children }: LayoutProps = $props();
 
@@ -14,7 +18,7 @@
 
 	const switchTheme = () => {
 		const newTheme = getThemeName() === 'dark' ? 'light' : 'dark';
-		state.preferredTheme = newTheme;
+		globalState.preferredTheme = newTheme;
 	};
 
 	$effect(themeEffect);
@@ -29,7 +33,7 @@
 
 <div class="align-center flex justify-between p-4">
 	<a
-		title="Download README"
+		title="Descargar README"
 		href="{base}/README.md"
 		download="README.md"
 		class="cursor-pointer p-2"
@@ -37,7 +41,7 @@
 		<Download />
 	</a>
 
-	<button title="Switch theme" onclick={switchTheme} class="cursor-pointer p-2">
+	<button title="Cambiar de tema" onclick={switchTheme} class="cursor-pointer p-2">
 		<ThemeIcon />
 	</button>
 </div>

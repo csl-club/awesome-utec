@@ -28,6 +28,7 @@
 		"@tailwindcss/vite": "^4.0.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/svelte": "^5.2.4",
+		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
 		"@types/lodash-es": "^4.17.12",
 		"@types/node": "^22.13.10",
 		"eslint": "^9.18.0",
@@ -59,7 +60,6 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.483.0",
-		"classnames": "^2.5.1",
 		"dotenv": "^16.4.7",
 		"linguist-languages": "^7.29.0",
 		"polished": "^4.3.1",

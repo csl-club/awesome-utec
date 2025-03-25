@@ -3,19 +3,21 @@ import themes, { isThemeName, themeVariables, type Theme, type ThemeName } from 
 export interface State {
 	preferredTheme: ThemeName | null;
 	searchQuery: string;
+	searchInput: HTMLInputElement | null;
 }
 
-const state = $state<State>({
+const globalState = $state<State>({
 	preferredTheme: null,
 	searchQuery: '',
+	searchInput: null,
 });
 
-export const getThemeName = (): ThemeName => state.preferredTheme ?? 'light';
+export const getThemeName = (): ThemeName => globalState.preferredTheme ?? 'light';
 export const getTheme = (): Theme => themes[getThemeName()];
 
 export const themeEffect = () => {
-	if (state.preferredTheme !== null) {
-		localStorage.theme = state.preferredTheme;
+	if (globalState.preferredTheme !== null) {
+		localStorage.theme = globalState.preferredTheme;
 	}
 
 	const theme = getTheme();
@@ -29,8 +31,8 @@ export const themeEffect = () => {
 export const loadPreferredTheme = () => {
 	const savedThemeName = localStorage.theme;
 	if (savedThemeName !== null && isThemeName(savedThemeName)) {
-		state.preferredTheme = savedThemeName;
+		globalState.preferredTheme = savedThemeName;
 	}
 };
 
-export default state;
+export default globalState;

@@ -1,30 +1,27 @@
 <script lang="ts">
-	import type { Project } from '$lib/content';
-	import classNames from 'classnames';
-	import type { HTMLLiAttributes } from 'svelte/elements';
-	import { repoStringToUrl } from '$lib/repo';
 	import ExternalLink from '$lib/components/ExternalLink.svelte';
-	import { Link } from '@lucide/svelte';
-	import LangLabel from './LangLabel.svelte';
-	import { addTokenToQuery } from '$lib/svelte/search.svelte';
+	import type { Project } from '$lib/content';
+	import { repoStringToUrl } from '$lib/repo';
 	import { Token } from '$lib/search';
+	import { addTokenToQuery } from '$lib/svelte/search.svelte';
+	import LangLabel from './LangLabel.svelte';
+	import { Link } from '@lucide/svelte';
+	import type { HTMLLiAttributes } from 'svelte/elements';
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;
-		focusInput: () => void;
 	}
 
-	const { project, focusInput, class: className, ...props }: Props = $props();
+	const { project, class: className, ...props }: Props = $props();
 
 	const onTagClick = (tag: string) => {
 		addTokenToQuery(new Token('tag', tag));
-		focusInput();
 	};
 
 	const projectUrl = $derived(repoStringToUrl(project.repo));
 </script>
 
-<li {...props} class={classNames(className, 'bg-background-alt flex flex-col space-y-2 px-4 py-2')}>
+<li {...props} class={['bg-background-alt flex flex-col space-y-2 px-4 py-2', className]}>
 	<div class="flex items-start justify-between">
 		<h2 class="text-xl font-semibold">
 			<ExternalLink href={projectUrl}>

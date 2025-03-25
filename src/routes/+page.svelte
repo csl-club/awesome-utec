@@ -1,39 +1,31 @@
 <script lang="ts">
-	import removeAccents from 'remove-accents';
-	import type { PageProps } from './$types';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
-	import { executeProjectQuery, parseTokens } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import globalState from '$lib/svelte/state.svelte';
-	import type { Project } from '$lib/content';
+	import { doesProjectMatchQuery } from '$lib/search';
+	import { projectSorters, SORT_TYPES, type SortType } from '$lib/sorting';
+	import globalState from '$lib/svelte/global-state.svelte';
+	import type { PageProps } from './$types';
+	import { ArrowDown, ArrowUp } from '@lucide/svelte';
 
 	const { data }: PageProps = $props();
 
-	const removeProjectAccents = (proj: Project): Project => ({
-		name: removeAccents(proj.name),
-		authors: proj.authors.map((author) => ({
-			...author,
-			name: removeAccents(author.name),
-		})),
-		summary: removeAccents(proj.summary),
-		tags: proj.tags.map(removeAccents),
-		lang: proj.lang ? removeAccents(proj.lang) : proj.lang,
-		repo: removeAccents(proj.repo),
+	let sortType = $state<SortType>('default');
+	let reverseSort = $state(false);
+
+	const sorter = $derived(projectSorters[sortType]);
+
+	const filteredProjects = $derived.by(() => {
+		const result = data.projects
+			.filter(doesProjectMatchQuery(globalState.searchQuery))
+			.sort(sorter.sort);
+
+		if (reverseSort) {
+			result.reverse();
+		}
+		return result;
 	});
 
-	let searchInput = $state<HTMLInputElement | null>(null);
-
-	const focusInput = () => searchInput?.focus();
-
-	const searchTokens = $derived(parseTokens(globalState.searchQuery));
-
-	const filteredProjects = $derived(
-		searchTokens.length === 0
-			? data.projects
-			: data.projects.filter((proj) =>
-					executeProjectQuery(searchTokens, removeProjectAccents(proj))!.hasSome(),
-				),
-	);
+	const SortDirectionIcon = $derived(reverseSort ? ArrowUp : ArrowDown);
 </script>
 
 <svelte:head>
@@ -41,29 +33,54 @@
 </svelte:head>
 
 <main class="font-main mx-auto max-w-4xl px-6 py-4">
-	<h1 class="mb-4 text-center text-4xl font-bold">Awesome UTEC</h1>
 	<div class="text-center">
-		<a href="https://awesome.re" aria-label="Awesome">
-			<enhanced:img src="$lib/assets/img/awesome.svg" alt="" class="inline" />
-		</a>
+		<div class="relative inline-block">
+			<h1 class="mx-auto mb-4 text-center text-4xl font-bold">Awesome UTEC</h1>
+			<a
+				href="https://awesome.re"
+				aria-label="Awesome"
+				class="motion-safe:animate-grow absolute -right-2 -bottom-1 translate-x-1/2 -rotate-12"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<enhanced:img src="$lib/assets/img/awesome.svg" alt="" class="inline" />
+			</a>
+		</div>
 	</div>
 
 	<p class="my-10 text-center text-lg">
 		Un compendio de proyectos de computación de la Universidad de Ingeniería y Tecnología.
 	</p>
 
-	<div class="space-x-4 text-center">
+	<div class="space-x-4 text-center text-sm">
+		<label for="sortby" class="text-foreground-muted mr-0">Buscar:</label>
 		<SearchInput
-			placeholder="Buscar..."
+			name="sortby"
+			id="sortby"
 			bind:value={globalState.searchQuery}
-			bind:input={searchInput}
-			class="w-64 text-sm"
+			bind:input={globalState.searchInput}
+			class="w-64 "
 		/>
+
+		<label for="sortby" class="text-foreground-muted mr-0">Ordenar por:</label>
+		<select
+			name="sortby"
+			id="sortby"
+			bind:value={sortType}
+			class="border-foreground mr-1 border px-2 py-1"
+		>
+			{#each SORT_TYPES as sortType, index (index)}
+				<option value={sortType}>{projectSorters[sortType].displayName}</option>
+			{/each}
+		</select>
+		<button onclick={() => (reverseSort = !reverseSort)}>
+			<SortDirectionIcon class="inline w-5 cursor-pointer" />
+		</button>
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
 		{#each filteredProjects as project (project.repo)}
-			<ProjectCard {project} {focusInput} />
+			<ProjectCard {project} />
 		{/each}
 	</ul>
 </main>

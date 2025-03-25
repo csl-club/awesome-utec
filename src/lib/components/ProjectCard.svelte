@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Project } from '$lib/content';
-	import type { HTMLLiAttributes } from 'svelte/elements';
-	import { repoStringToUrl } from '$lib/repo';
 	import ExternalLink from '$lib/components/ExternalLink.svelte';
-	import { Link } from '@lucide/svelte';
-	import LangLabel from './LangLabel.svelte';
-	import { addTokenToQuery } from '$lib/svelte/search.svelte';
+	import type { Project } from '$lib/content';
+	import { repoStringToUrl } from '$lib/repo';
 	import { Token } from '$lib/search';
+	import { addTokenToQuery } from '$lib/svelte/search.svelte';
+	import LangLabel from './LangLabel.svelte';
+	import { Link } from '@lucide/svelte';
+	import type { HTMLLiAttributes } from 'svelte/elements';
 
 	export interface Props extends HTMLLiAttributes {
 		project: Project;

@@ -1,5 +1,5 @@
-import { expect, test } from 'vitest';
 import { parseToken, parseTokens } from './search';
+import { expect, test } from 'vitest';
 
 test('parseToken', () => {
 	expect(parseToken('foO')).toStrictEqual({

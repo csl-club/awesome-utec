@@ -1,10 +1,10 @@
+import { parseRepoInfo, type RepoInfo, type RepoType } from './repo';
+import { Gitlab } from '@gitbeaker/rest';
+import { Octokit } from '@octokit/rest';
+import { isEmpty, maxBy, merge } from 'lodash-es';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
-import { Octokit } from '@octokit/rest';
-import { Gitlab } from '@gitbeaker/rest';
-import { parseRepoInfo, type RepoInfo, type RepoType } from './repo';
-import { readFile } from 'node:fs/promises';
-import { isEmpty, maxBy, merge } from 'lodash-es';
 import z from 'zod';
 
 export const Author = z.object({

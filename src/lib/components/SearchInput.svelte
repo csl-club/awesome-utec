@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { on } from 'svelte/events';
 	import type { HTMLInputAttributes } from 'svelte/elements';
+	import { on } from 'svelte/events';
 
 	export interface Props extends HTMLInputAttributes {
 		focusOnSlash?: boolean;

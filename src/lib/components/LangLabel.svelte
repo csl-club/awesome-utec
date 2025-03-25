@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { HTMLAttributes } from 'svelte/elements';
-	import SimpleIconComponent from './SimpleIconComponent.svelte';
 	import { colorByProgrammingLanguage, iconByProgrammingLanguage } from '$lib/icons';
-	import { setLightness } from 'polished';
-	import { themeVariables } from '$lib/themes';
+	import { Token } from '$lib/search';
 	import globalState from '$lib/svelte/global-state.svelte';
 	import { addTokenToQuery } from '$lib/svelte/search.svelte';
-	import { Token } from '$lib/search';
+	import { themeVariables } from '$lib/themes';
+	import SimpleIconComponent from './SimpleIconComponent.svelte';
+	import { setLightness } from 'polished';
+	import type { HTMLAttributes } from 'svelte/elements';
 
 	export interface Props extends HTMLAttributes<HTMLSpanElement> {
 		lang: string;

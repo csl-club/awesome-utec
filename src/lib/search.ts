@@ -1,5 +1,5 @@
-import removeAccents from 'remove-accents';
 import type { Project } from './content';
+import removeAccents from 'remove-accents';
 
 export const TOKEN_TYPES = ['name', 'author', 'summary', 'tag', 'lang'] as const;
 export type TokenType = (typeof TOKEN_TYPES)[number];

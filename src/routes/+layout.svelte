@@ -7,10 +7,10 @@
 	} from '$lib/svelte/global-state.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
-	import { Download, MoonStar, Sun } from '@lucide/svelte';
-	import { initScript } from './theme-init';
-	import type { LayoutProps } from './$types';
 	import { base } from '$app/paths';
+	import type { LayoutProps } from './$types';
+	import { initScript } from './theme-init';
+	import { Download, MoonStar, Sun } from '@lucide/svelte';
 
 	let { children }: LayoutProps = $props();
 

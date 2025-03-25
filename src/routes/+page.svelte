@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PageProps } from './$types';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
-	import { doesProjectMatchQuery } from '$lib/search';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import globalState from '$lib/svelte/global-state.svelte';
+	import { doesProjectMatchQuery } from '$lib/search';
 	import { projectSorters, SORT_TYPES, type SortType } from '$lib/sorting';
+	import globalState from '$lib/svelte/global-state.svelte';
+	import type { PageProps } from './$types';
 	import { ArrowDown, ArrowUp } from '@lucide/svelte';
 
 	const { data }: PageProps = $props();

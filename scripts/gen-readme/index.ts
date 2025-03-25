@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { getAllProjects } from '../../src/lib/content';
 import { generateReadme } from './lib';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const args = process.argv.slice(2);
 const checkOnly = args.includes('--check');

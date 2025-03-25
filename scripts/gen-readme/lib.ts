@@ -1,6 +1,6 @@
 import type { Project } from '../../src/lib/content';
-import { enumerate } from '../../src/lib/util/arrays';
 import { repoStringToUrl } from '../../src/lib/repo';
+import { enumerate } from '../../src/lib/util/arrays';
 
 const prettifyTag = (s: string) => s[0].toUpperCase() + s.slice(1);
 

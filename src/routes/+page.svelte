@@ -52,30 +52,36 @@
 		Un compendio de proyectos de computación de la Universidad de Ingeniería y Tecnología.
 	</p>
 
-	<div class="space-x-4 text-center text-sm">
-		<label for="sortby" class="text-foreground-muted mr-0">Buscar:</label>
-		<SearchInput
-			name="sortby"
-			id="sortby"
-			bind:value={globalState.searchQuery}
-			bind:input={globalState.searchInput}
-			class="w-64 "
-		/>
+	<div
+		class="flex flex-col items-center justify-center space-y-4 space-x-4 text-center text-sm sm:flex-row sm:space-y-0"
+	>
+		<div class="text-right">
+			<label for="sortby" class="text-foreground-muted mr-0">Buscar:</label>
+			<SearchInput
+				name="sortby"
+				id="sortby"
+				bind:value={globalState.searchQuery}
+				bind:input={globalState.searchInput}
+				class="w-64 "
+			/>
+		</div>
 
-		<label for="sortby" class="text-foreground-muted mr-0">Ordenar por:</label>
-		<select
-			name="sortby"
-			id="sortby"
-			bind:value={sortType}
-			class="border-foreground mr-1 border px-2 py-1"
-		>
-			{#each SORT_TYPES as sortType, index (index)}
-				<option value={sortType}>{projectSorters[sortType].displayName}</option>
-			{/each}
-		</select>
-		<button onclick={() => (reverseSort = !reverseSort)}>
-			<SortDirectionIcon class="inline w-5 cursor-pointer" />
-		</button>
+		<div class="text-left">
+			<label for="sortby" class="text-foreground-muted mr-0">Ordenar por:</label>
+			<select
+				name="sortby"
+				id="sortby"
+				bind:value={sortType}
+				class="border-foreground mr-1 border px-2 py-1"
+			>
+				{#each SORT_TYPES as sortType, index (index)}
+					<option value={sortType}>{projectSorters[sortType].displayName}</option>
+				{/each}
+			</select>
+			<button onclick={() => (reverseSort = !reverseSort)}>
+				<SortDirectionIcon class="inline w-5 cursor-pointer" />
+			</button>
+		</div>
 	</div>
 
 	<ul class="my-8 grid grid-cols-1 gap-4 sm:grid-cols-2">

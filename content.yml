@@ -1,11 +1,11 @@
 authors:
-  - id: grayson
+  grayson:
     name: José Daniel Grayson
     email: josedanielgrayson@proton.me
-  - id: salva
+  salva:
     name: Salvador Donayre
     email: atlas200x@gmail.com
-  - id: erizur
+  erizur:
     name: Angel Mattos
 
 projects:

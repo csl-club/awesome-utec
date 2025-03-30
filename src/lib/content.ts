@@ -7,13 +7,16 @@ import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import z from 'zod';
 
-export const Author = z.object({
-	id: z.string(),
+export const AuthorData = z.object({
 	name: z.string(),
 	email: z.string().email().optional(),
 });
 
-export type Author = z.infer<typeof Author>;
+export type AuthorData = z.infer<typeof AuthorData>;
+
+export const AuthorDataRecord = z.record(z.string(), AuthorData);
+
+export type AuthorDataRecord = z.infer<typeof AuthorDataRecord>;
 
 export const ProjectData = z.object({
 	name: z.string(),
@@ -25,6 +28,12 @@ export const ProjectData = z.object({
 });
 
 export type ProjectData = z.infer<typeof ProjectData>;
+
+export const Author = AuthorData.extend({
+	id: z.string(),
+});
+
+export type Author = z.infer<typeof Author>;
 
 export const Project = z.object({
 	name: z.string(),
@@ -38,7 +47,7 @@ export const Project = z.object({
 export type Project = z.infer<typeof Project>;
 
 export const ContentData = z.object({
-	authors: z.array(Author),
+	authors: AuthorDataRecord,
 	projects: z.array(ProjectData),
 });
 
@@ -96,7 +105,7 @@ const remoteFetchers: Record<RepoType, RemoteFetcher> = {
 const completeProjectData = async (
 	auth: AuthConfig,
 	projectData: ProjectData,
-	allAuthors: Author[],
+	authorData: AuthorDataRecord,
 ): Promise<Project> => {
 	projectData.tags ??= [];
 
@@ -107,16 +116,9 @@ const completeProjectData = async (
 		projectData = merge(remoteData, projectData);
 	}
 
-	const authors = projectData.authors.map(
-		(authorId) => allAuthors.find((author) => author.id === authorId)!,
-	);
+	const authors = projectData.authors.map((id) => ({ ...authorData[id], id }));
 
-	const finalData = {
-		...projectData,
-		authors,
-	};
-
-	return unwrapZodResult(Project.safeParse(finalData));
+	return unwrapZodResult(Project.safeParse({ ...projectData, authors }));
 };
 
 const unwrapZodResult = <T>(result: z.SafeParseReturnType<unknown, T>): T => {

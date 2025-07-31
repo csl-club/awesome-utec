@@ -13,6 +13,7 @@ Un compendio de proyectos de computación de la [Universidad de Ingeniería y Te
 
 ### Retro
 
+- [Gemu](https://github.com/Grazen0/gemu) (José Daniel Grayson): Un emulador de Game Boy escrito en C.
 - [NES Pong](https://github.com/Grazen0/nes-pong) (José Daniel Grayson): Un juego simple de pong para la NES.
 - [Space Invaders](https://github.com/Grazen0/space-invaders) (José Daniel Grayson): Emulador de Space Invaders escrito en Rust.
 
@@ -20,6 +21,7 @@ Un compendio de proyectos de computación de la [Universidad de Ingeniería y Te
 
 - [Alfajor](https://github.com/OcZi/Alfajor) (Salvador Donayre): Hack de ViaVersion para interceptar packet mappers en Minecraft.
 - [Frozen Bubble SDL2](https://github.com/Erizur/frozen-bubble-sdl2) (Angel Mattos): Un port no oficial en SDL2 de Frozen Bubble.
+- [Gemu](https://github.com/Grazen0/gemu) (José Daniel Grayson): Un emulador de Game Boy escrito en C.
 - [NES Pong](https://github.com/Grazen0/nes-pong) (José Daniel Grayson): Un juego simple de pong para la NES.
 - [Space Invaders](https://github.com/Grazen0/space-invaders) (José Daniel Grayson): Emulador de Space Invaders escrito en Rust.
 

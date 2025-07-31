@@ -30,3 +30,8 @@ projects:
     summary: Un juego simple de pong para la NES.
     tags: [videogames, retro]
     repo: github:Grazen0/nes-pong
+  - name: Gemu
+    authors: [grayson]
+    summary: Un emulador de Game Boy escrito en C.
+    tags: [videogames, retro]
+    repo: github:Grazen0/gemu

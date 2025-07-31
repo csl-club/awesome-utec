@@ -67,7 +67,7 @@ export const parseTokens = (query: string): Token[] => {
 const normalizeText = (text: string) => removeAccents(text).toLowerCase();
 
 const matchesToken = (token: Token) => (text: string) => {
-	var n = normalizeText(text);
+	const n = normalizeText(text);
 	return token.type === 'lang' ? n === token.text : n.includes(token.text);
 };
 

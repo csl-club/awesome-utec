@@ -5,17 +5,17 @@ export interface Sorter<T> {
 	sort: (a: T, b: T) => number;
 }
 
-export const SORT_TYPES = ['default', 'lang', 'name'] as const;
+export const SORT_TYPES = ['lang', 'name'] as const;
 
 export type SortType = (typeof SORT_TYPES)[number];
 
 export const projectSorters: Readonly<Record<SortType, Sorter<Project>>> = {
 	name: {
-		displayName: 'Nombre',
+		displayName: 'nombre',
 		sort: (pa, pb) => pa.name.localeCompare(pb.name),
 	},
 	lang: {
-		displayName: 'Lenguaje',
+		displayName: 'lenguaje',
 		sort: (pa, pb) =>
 			pa.lang === pb.lang
 				? 0
@@ -24,9 +24,5 @@ export const projectSorters: Readonly<Record<SortType, Sorter<Project>>> = {
 					: pb.lang === undefined
 						? 1
 						: pa.lang.localeCompare(pb.lang),
-	},
-	default: {
-		displayName: '-',
-		sort: () => 0,
 	},
 } as const;

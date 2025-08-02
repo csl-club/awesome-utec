@@ -9,7 +9,7 @@
 
 	const { data }: PageProps = $props();
 
-	let sortType = $state<SortType>('default');
+	let sortType = $state<SortType>('name');
 	let reverseSort = $state(false);
 
 	const sorter = $derived(projectSorters[sortType]);
